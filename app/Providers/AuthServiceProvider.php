@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('modify', function (User $user, Petition $petition) {
             //Modify - edit and delete - petition if it was created by you
-            return $petition->user->is($user);
+            return $petition->user->is($user) || $user->role == 'admin';
         });
 
         Gate::define('update', function (User $user, Petition $petition) {
@@ -38,13 +38,13 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('sign', function (User $user, Petition $petition) {
-            //Sign petition if it was not created by you
+            //Sign petition if it was not created by you and you have not signed before
             return $user &&
                 !$petition->user->is($user) &&
-                !$petition->signatures()->where([
-                    'petition_id' => $petition->id,
-                    'email' => $user->email,
-                ]);
+                !$petition
+                    ->signatures()
+                    ->where('user_id', $user->id)
+                    ->first();
         });
 
         Gate::define('view', function (User $user) {

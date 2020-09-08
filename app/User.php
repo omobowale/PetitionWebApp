@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Petition;
+use App\Signature;
 
 class User extends Authenticatable
 {
@@ -38,5 +39,10 @@ class User extends Authenticatable
     public function petitions()
     {
         return $this->hasMany(Petition::class);
+    }
+
+    public function signatures()
+    {
+        return $this->hasMany(Signature::class);
     }
 }

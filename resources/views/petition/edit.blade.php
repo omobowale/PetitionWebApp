@@ -91,7 +91,7 @@ Vivamus ut ante nisi. Nunc tellus eros, congue vel ligula et</p>
                                 @enderror
                             </div>
                             <div class="col-12 form-group">
-                                <label for="video_details" class="sr-only">Letter Details</label>
+                                <label for="video_details" class="ml-1">Video Details</label>
                                 <textarea rows="12" name="video_details" id="video_details" class="form-control rounded  @error('video_details') is-invalid @enderror" placeholder="Write details about the video">{{ $petition->video_details}}</textarea>
                                 @error('video_details')
                                     <div class="alert alert-danger">{{ $message }}</div>
@@ -140,7 +140,7 @@ Vivamus ut ante nisi. Nunc tellus eros, congue vel ligula et</p>
                             </div>
 
                             <div class="col-12 form-group">
-                                <label for="update_details" class="sr-only">Update Details</label>
+                                <label for="update_details" class="">Update Details</label>
                                 <textarea name="update_details" rows="12" class="form-control rounded  @error('update_details') is-invalid @enderror" placeholder="Write details about the updates"></textarea>
                                 @error('update_details')
                                     <div class="alert alert-danger">{{ $message }}</div>
@@ -164,3 +164,14 @@ Vivamus ut ante nisi. Nunc tellus eros, congue vel ligula et</p>
 @endsection
 
 
+<script>
+    window.addEventListener('load', function(){
+        
+       CKEDITOR.replace('update_details');
+       CKEDITOR.replace('letter');
+       CKEDITOR.replace('petition_description');
+       CKEDITOR.replace('video_details');
+
+
+    });
+</script>

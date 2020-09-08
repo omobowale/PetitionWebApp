@@ -29,9 +29,9 @@
                         <img class="w-100 h-100 mx-0 px-0" src="{{$petition->cover_image ? '/storage/cover_images/'.$petition->cover_image : 'https://www.lansingcitypulse.com/uploads/original/20200320-134347-petition.jpg'}}" />
                     </div>
                     <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                        <div>
+                        <div style="">
                             <h1 style="font-size:3rem; font-family: 'Raleway'" class="text-info">{{$petition->petition_title}}</h1>
-                            <p style="font-family: 'Quicksand', sans-serif;">{{$petition->petition_description}}</p>
+                            <p style="font-family: 'Quicksand', sans-serif;">{!!$petition->petition_description!!}</p>
                             @can('modify', $petition)
                             <div class="text-center mt-4">
                                 <span class="p-2 alert alert-success mr-4" style="cursor:pointer"><i class="far fa-edit"></i><a href="/petitions/{{$petition->id}}/edit" style="text-decoration:none">Edit</a></span>
@@ -42,6 +42,7 @@
                                         <i class="fas fa-trash"></i>Delete
                                     </button>
                                 </form>
+                                <div class="text-center"><a href="/petitions/{{$petition->id}}">View details</a></div>
                             </div>
                         @endcan
                         </div>

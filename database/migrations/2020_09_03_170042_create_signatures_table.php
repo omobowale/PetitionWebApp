@@ -16,9 +16,7 @@ class CreateSignaturesTable extends Migration
         Schema::create('signatures', function (Blueprint $table) {
             $table->id();
             $table->integer('petition_id');
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('email')->unique();
+            $table->integer('user_id');
             $table->text('signature_reason');
             $table->timestamps();
         });

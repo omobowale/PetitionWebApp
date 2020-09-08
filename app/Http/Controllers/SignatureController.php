@@ -36,17 +36,12 @@ class SignatureController extends Controller
     {
         $request->validate([
             'petition_id' => 'required|numeric',
-            'firstname' => 'required|string|min:2',
-            'lastname' => 'required|string|min:2',
-            'email' => 'required|email|min:4',
             'signature_reason' => 'required|string|min:10',
         ]);
 
         $signature = new Signature();
         $signature->petition_id = $request->input('petition_id');
-        $signature->firstname = $request->input('firstname');
-        $signature->lastname = $request->input('lastname');
-        $signature->email = $request->input('email');
+        $signature->user_id = Auth::user()->id;
         $signature->signature_reason = $request->input('signature_reason');
         $signature->save();
 

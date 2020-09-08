@@ -43,9 +43,17 @@
 
 
 <div class="container my-5"> 
-    <h4 class="mb-4">A Petition by: {{ucwords(App\User::find($petition->user_id)->name)}}@cannot('sign', $petition) <small class="text-success float-right text-sm">Already Signed this petition</small> @endcannot @can('s float-rightign', $petition)<a href="#signform" class="btn btn-info float-right rounded-pill py-2 px-3">Sign this</a>@endcan</h4>
+    <h4 class="mb-4">A Petition by: {{ucwords(App\User::find($petition->user_id)->name)}}
+    @guest <small class="text-info float-right text-sm">Log in to sign this petition</small>  
+    
+    @else
+
+        @cannot('sign', $petition) <small class="text-success float-right text-sm">Already Signed this petition</small> @endcannot 
+        @can('sign', $petition)<a href="#signform" class="btn btn-info float-right rounded-pill py-2 px-3">Sign this</a>@endcan</h4>
+
+    @endguest
     <h6 class="mb-4">Created on: {{$petition->created_at}}</h6>
-    <p class="lead text-justify">{{$petition->petition_description}}</p>
+    <p class="lead text-justify">{!!$petition->petition_description!!}</p>
     <hr>
 </div>
 
@@ -54,12 +62,24 @@
 
 @if($petition->featured_video_url)
     <div class="container">
+            <div>
+                <h5>{{$petition->video_headline}}</h5>
+            </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
+            
+            @php 
+                $url = explode('=', $petition->featured_video_url)
+            @endphp
                 <iframe width="555" height="315" 
-                    src="{{$petition->featured_video_url}}" frameborder="0" 
+                    src="https://www.youtube.com/embed/{{$url[1]}}" frameborder="0" 
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                 </iframe>
+            </div> 
+            <div class="col-6">
+                <small>
+                    {!!$petition->video_details!!}
+                </small>
             </div>
         </div>
     <div>
@@ -72,7 +92,7 @@
 <div class="container text-white bg-secondary text-justify p-5 mt-5 text-capitalize" style="font-family: 'Caveat', cursive; font-size:1.5em"> 
     <p class="">To,</p>
     <p class="mb-4 text-capitalize">{{$petition->letter_recipient}}</p>
-    <article class="text-justify" style="">{{ucfirst($petition->letter)}}</article>
+    <article class="text-justify" style="">{!!ucfirst($petition->letter)!!}</article>
     <p class="mt-4">Sincerely,</p>
     <p class="mb-4 text-captitalize">{{App\User::find($petition->user_id)->name}}</p>
 </div>
@@ -204,7 +224,7 @@
                                 <h5>{{$signature->firstname}}</h5>
                                 <small>{{$signature->created_at}}</small>
                                 <hr>
-                                <small style="overflow-wrap: break-word">{{ucfirst($signature->signature_reason)}}</small>
+                                <small style="overflow-wrap: break-word">{!!ucfirst($signature->signature_reason)!!}</small>
                             </div>
                         </div>
                     @endforeach        
@@ -238,33 +258,11 @@
                         <div class="row">
 
                             <input type="hidden" name="petition_id" id="petition_id" value="{{$petition->id}}" />
-                            <div class="col-6 form-group">
-                                <label class="sr-only">First Name</label>
-                                <input name="firstname" id="firstname" value="{{ old('firstname') }}" required class="form-control rounded p-4 text-center @error('firstname') is-invalid @enderror" type="text" placeholder="Please enter first name" />
-                                @error('firstname')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            
 
-                            <div class="col-6 form-group">
-                                <label class="sr-only">Last Name</label>
-                                <input name="lastname" id="lastname" value="{{ old('lastname') }}" required class="form-control rounded p-4 text-center @error('lastname') is-invalid @enderror" type="text" placeholder="Please enter last name" />
-                                @error('lastname')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="offset-2 col-8 form-group">
-                                <label class="sr-only">Email</label>
-                                <input name="email" id="email" value="{{ old('email') }}" required class="form-control rounded p-4 text-center @error('email') is-invalid @enderror" type="email" placeholder="Please enter email" />
-                                @error('email')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="offset-2 col-8 form-group">
-                                <label class="sr-only">Reason</label>
-                                <textarea name="signature_reason" id="signature_reason" required rows="12" class="form-control rounded @error('signature_reason') is-invalid @enderror" placeholder="Please enter reason why you are signing this petition">{{ old('signature_reason') }}</textarea>
+                            <div class="offset-2 col-8 form-group mt-3">
+                                <label class="">Reason For Signing</label>
+                                <textarea name="signature_reason" id="signature_reason-ckeditor" required rows="12" class="form-control rounded @error('signature_reason') is-invalid @enderror" placeholder="Please enter reason why you are signing this petition">{{ old('signature_reason') }}</textarea>
                                 @error('signature_reason')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -290,8 +288,12 @@
 
 @endsection
 
+
+
 <script>
     window.addEventListener('load', function(){
+        
+       CKEDITOR.replace('signature_reason-ckeditor');
 
         $(".section1").hide();
 
@@ -305,6 +307,8 @@
             $(".section1").hide();
             $(".section2").show();
         });
+
+
 
     });
 </script>

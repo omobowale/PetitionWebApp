@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Petition;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'can:view']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +51,12 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return view('users.index')->with('user', $user);
+
+        if (!empty($user) || $user != null) {
+            return view('users.index')->with('user', $user);
+        }
+
+        return back();
     }
 
     /**
@@ -83,13 +93,26 @@ class UsersController extends Controller
         $user = User::find($id);
         //delete all of their petitions first
         $petitions = $user->petitions()->get();
+        $signatures = $user->signatures()->get();
+
         foreach ($petitions as $petition) {
             $petition->delete();
+        }
+
+        foreach ($signatures as $signature) {
+            $signature->delete();
         }
 
         //delete the user
         $user->delete();
 
-        return view('admin.index')->with('message', 'User deleted');
+        $users = User::paginate(10);
+        $petitions = Petition::paginate(10);
+
+        return view('admin.index')->with([
+            'message' => 'User deleted',
+            'petitions' => $petitions,
+            'users' => $users,
+        ]);
     }
 }

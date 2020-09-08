@@ -11,7 +11,7 @@
             <div class="col-6 text-center d-flex align-items-center justify-content-center">
                 <div>
                     <h1 style="font-size:3rem; font-family: 'Raleway'" class="text-info">{{$petition->petition_title}}</h1>
-                    <p style="font-family: 'Quicksand', sans-serif;">{{$petition->petition_description}}</p>
+                    <div style="font-family: 'Quicksand', sans-serif; overflow:hidden">{!!$petition->petition_description!!}</div>
                     <div class="mt-5"><a href="/petitions/{{$petition->id}}" class="btn btn-info rounded-pill px-3 py-2">View / Sign this petition</a></div>
                 </div>
             </div>

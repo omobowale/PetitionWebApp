@@ -127,8 +127,13 @@ class PetitionController extends Controller
      */
     public function show($id)
     {
-        $petition = Petition::find($id);
-        return view('petition.show')->with('petition', $petition);
+        try {
+            $petition = Petition::find($id);
+            return view('petition.show')->with('petition', $petition);
+        } catch (Throwable $e) {
+            report($e);
+            return view('pages.error');
+        }
     }
 
     /**
@@ -231,6 +236,13 @@ class PetitionController extends Controller
     public function destroy($id)
     {
         $petition = Petition::find($id);
+        foreach ($petition->signatures()->get() as $signature) {
+            $signature->delete();
+        }
+        foreach ($petition->updates()->get() as $update) {
+            $update->delete();
+        }
+
         $petition->delete();
 
         return back()->with(

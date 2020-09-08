@@ -20,17 +20,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/4d338041ef.js" crossorigin="anonymous"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+
 
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md bg-info shadow-sm">
             <div class="container">
-                <a class="navbar-brand text-white" href="{{ url('/petitions') }}">
+                <a class="navbar-brand text-primary p-2" style="background-color: lavender" href="{{ url('/petitions') }}">
                     {{ config('app.name', 'Petition') }}
+                </a>
+                <a class="navbar-brand text-white ml-4" href="{{ url('/petitions') }}">
+                   Home
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

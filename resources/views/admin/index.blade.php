@@ -47,18 +47,15 @@
                         <td>{{$petition->user->name}}</td>
                         <td>{{$petition->created_at}}</td>
                         <td>
-                            @can('modify', $petition)
-                            <span class="p-2 text-success mr-4" style="cursor:pointer"><i class="far fa-edit"></i><a href="/petitions/{{$petition->id}}/edit" style="text-decoration:none">Edit</a></span>
-                                <form action="/petitions/{{$petition->id}}" method="post" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="p-0 border-0 text-danger" style="cursor:pointer">
-                                        <i class="fas fa-trash"></i>Delete
-                                    </button>
-                                </form>
-                            @endcan
-
-                            
+                            <span class="p-2 text-success mr-4" style="cursor:pointer"><i class="far fa-edit"></i><a href="/petitions/{{$petition->id}}/edit" style="text-decoration:none">Edit</a>
+                            </span>
+                            <form action="/petitions/{{$petition->id}}" method="post" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button class="p-0 border-0 text-danger" style="cursor:pointer">
+                                    <i class="fas fa-trash"></i>Delete
+                                </button>
+                            </form>
                         </td>
                         
                     </tr>
@@ -76,7 +73,7 @@
 
     <div class="tab-pane fade show active" id="report" role="tabpanel" aria-labelledby="report-tab">
        
-        @if(count($users) > 0)
+        @if(count($users) > 1)
         <h4 class="alert alert-info text-center">All Users - <span class="text-primary">[Click on a row to view or edit users]</span></h4>
         <table class="table table-hover table-responsive-sm">
             <tr>
@@ -84,33 +81,23 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Registration Date</th>
-                <th>Action</th>
             </tr>
             @foreach($users as $index => $user)
+            @if($user->role !== 'admin')
             <tr style="cursor:pointer" class="user" id="{{$user->id}}">
                 <td>{{$index + 1}}</td>
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->created_at}}</td>
-                <td>
-                    @can('modify', $petition)
-                    <span class="p-2 text-success mr-4" style="cursor:pointer"><i class="far fa-edit"></i><a href="/users/{{$user->id}}" style="text-decoration:none">Edit</a></span>
-                        <form action="/users/{{$user->id}}" method="post" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="p-0 border-0 text-danger" style="cursor:pointer">
-                                <i class="fas fa-trash"></i>Delete
-                            </button>
-                        </form>
-                    @endcan
-
-                    
-                </td>
+                
                 
             </tr>
+            @endif
             @endforeach
         </table>
         {{$users->links()}}
+        @elseif(count($users) == 1)
+            <p class="alert alert-info">No users yet - You are the only user</p>
         @else
             <p class="alert alert-info">No users yet</p>
         @endif
@@ -134,6 +121,12 @@
 window.addEventListener('load', function(){
     $(".user").click(function(){
         window.location.href = "/users/" + $(this).attr("id");
+    });
+});
+
+window.addEventListener('load', function(){
+    $(".petition").click(function(){
+        window.location.href = "/petitions/" + $(this).attr("id");
     });
 });
 </script>
